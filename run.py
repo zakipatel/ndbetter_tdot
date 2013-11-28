@@ -1,10 +1,11 @@
 from twilio.rest import TwilioRestClient
 import twilio.twiml
 
-from flask import Flask
-from flask import request
+from flask import Flask, request, session
 
 app = Flask(__name__)
+
+app.secret_key = 'testing'
  
 @app.route("/")
 def hello():
@@ -13,13 +14,20 @@ def hello():
 @app.route("/receive-sms", methods=['GET', 'POST'])
 def reply():
 	print "Received Message"
-	if request.form['Body'] 
-	resp = twilio.twiml.Response()
-	resp.message("<Next Question>")
-	return str(resp)
 
-else:
-
+	counter = session.get('counter', 0)
+	
+	if request.form['Body']:
+		if counter == 0: 
+			resp = twilio.twiml.Response()
+			resp.message("What is your Barangay? (e.g. Cabungaan)")
+			counter +=1
+			session['counter'] = counter
+			return str(resp)
+	elif request.form['Body']:
+		pass
+	else:
+		pass
  
 if __name__ == "__main__":
     app.run(debug=True)
