@@ -21,11 +21,15 @@ def reply():
 		if counter == 0: 
 			resp = twilio.twiml.Response()
 			resp.message("What is your Barangay? (e.g. Cabungaan)")
-			counter +=1
+			counter += 1
 			session['counter'] = counter
 			return str(resp)
-	elif request.form['Body']:
-		pass
+		elif counter == 1:
+			resp = twilio.twiml.Response()
+			resp.message("Do you need: 1)Water, 2)Food, 3)Medical, 4)Shelter, 5)Electricity, 6)Others (options will follow)")
+			counter += 1
+			session['counter'] = counter
+			return str(resp)
 	else:
 		pass
  
