@@ -18,17 +18,28 @@ def reply():
 	counter = session.get('counter', 0)
 	
 	if request.form['Body']:
+		resp = twilio.twiml.Response()
 		if counter == 0: 
-			resp = twilio.twiml.Response()
 			resp.message("What is your Barangay? (e.g. Cabungaan)")
+			help_request = {}
+			help_request['number'] = request.form['From']
+			help_request['bar'] = request.form['Body']
+			# TODO: check whether it's a valid Barangay
+			session['help_request'] = help_request
 			counter += 1
 			session['counter'] = counter
 			return str(resp)
 		elif counter == 1:
-			resp = twilio.twiml.Response()
 			resp.message("Do you need: 1)Water, 2)Food, 3)Medical, 4)Shelter, 5)Electricity, 6)Others (options will follow)")
 			counter += 1
 			session['counter'] = counter
+			return str(resp)
+		elif counter == 2:
+			help_request = session.get('help_request')
+			help_request['type'] = request.form['Body']
+			# TODO: handle invalid option
+			session['help_request'] = help_request
+			resp.message("Thanks!")
 			return str(resp)
 	else:
 		pass
