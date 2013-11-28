@@ -1,7 +1,8 @@
 from twilio.rest import TwilioRestClient
 import twilio.twiml
+import requests
 
-from flask import Flask, request, session
+from flask import Flask, request, session, json
 
 app = Flask(__name__)
 
@@ -43,7 +44,22 @@ def reply():
 			return str(resp)
 	else:
 		pass
- 
+
+@app.route("/latlng")
+def getLatLng():
+	if request.method == 'GET':
+		barang = None
+		if 'barang' in request.args:
+			barang = request.args.get('barang')
+
+		if barang:
+			url = 'http://maps.googleapis.com/maps/api/geocode/json?address=%s,%s&sensor=false' % (barang, "philippines")
+			r = requests.get(url)
+			location = json.loads(r.text)['results'][0]['geometry']['location']
+			return json.dumps(location)
+ 		else:
+ 			return "Barangay not found. Can't parse lat/long"
+
 if __name__ == "__main__":
     app.run(debug=True)
 
