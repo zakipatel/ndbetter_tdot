@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Heatmaps</title>
+    
     <style>
-
       html, body, #map-canvas {
         height: 100%;
         margin: 0px;
@@ -22,15 +22,16 @@
       }
     </style>
 
+<!--     dependencies  -->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
-
-    <!-- // <script src="/socket.io/socket.io.js"></script> -->
+    
+<!-- script begins here -->
     <script>
 
-
-          // var taxiData = [
+          // use this data structure to generate a heatmap
+          // var heatMapData = [
           //   new google.maps.LatLng(37.782551, -122.445368),
           //   new google.maps.LatLng(37.782745, -122.444586),
           //   new google.maps.LatLng(37.782842, -122.443688),
@@ -538,7 +539,6 @@
 
       var markers = [];
      
-      // var myJSON = {'Lat':'13.151', 'Lon':'123.72', 'Resource':{'food':'1', 'water':'1'}};
       var philippines = new google.maps.LatLng(12.879721, 131.774017);
       
       function initialize() {
@@ -547,17 +547,16 @@
         var mapOptions = {
           zoom: 6,
           center: new google.maps.LatLng(11.3333, 123.0167),
-          mapTypeId: google.maps.MapTypeId.SATELLITE //ROADMAP
+          mapTypeId: google.maps.MapTypeId.ROADMAP //SATELLITE
         };
         
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-        var pointArray = new google.maps.MVCArray(taxiData); //ajax call
-        //assign default 
+        // var pointArray = new google.maps.MVCArray(heatMapData);
        
-        heatmap = new google.maps.visualization.HeatmapLayer({data: pointArray});
+        //heatmap = new google.maps.visualization.HeatmapLayer({data: pointArray});
 
-        heatmap.setMap(map);
+        //heatmap.setMap(map);
       }
       
 
@@ -744,12 +743,7 @@
   </head>
 
   <body>
-       <!--  <form method="post" id="addrota">
-                Get Data: <input type="text" name="rota">
-                <input type="button" id="btn" value="Get Data">
-        </form>
-
-        <br> -->
+       
         <div id="panel">
           <button id="water">Water</button>
           <button id="food">Food</button>
