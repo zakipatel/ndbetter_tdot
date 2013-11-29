@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Heatmaps</title>
-    
+
     <style>
       html, body, #map-canvas {
         height: 100%;
@@ -561,10 +561,52 @@
       
 
       // Add a marker to the map and push to the array.
-      function addMarker(location) {
+      function addFoodMarker(location) {
         marker = new google.maps.Marker({
           position: location,
-          map: map
+          map: map,
+          title: "Need Food!",
+          icon: "http://png-4.findicons.com/files/icons/341/food/32/food.png"
+        }); 
+        markers.push(marker);
+      }
+
+      function addWaterMarker(location) {
+        marker = new google.maps.Marker({
+          position: location,
+          map: map,
+          title: "Need Water!",
+          icon: "https://cdn0.iconfinder.com/data/icons/black-48x48-icons/48/Water_drop.png"
+        }); 
+        markers.push(marker);
+      }
+
+      function addMedMarker(location) {
+        marker = new google.maps.Marker({
+          position: location,
+          map: map,
+          title: "Need Medical Attention!",
+          icon: "http://www.med.navy.mil/sites/NavalHospitalJAX/Services/PublishingImages/Programs/RedCross24.jpg"
+        }); 
+        markers.push(marker);
+      }
+      
+      function addElectricityMarker(location) {
+        marker = new google.maps.Marker({
+          position: location,
+          map: map,
+          title: "Need Electricity!",
+          icon: "http://aux.iconpedia.net/uploads/electricity-icon-32.png"
+        }); 
+        markers.push(marker);
+      }
+
+      function addShelterMarker(location) {
+        marker = new google.maps.Marker({
+          position: location,
+          map: map,
+          title: "Need Shelter!",
+          icon: "http://www.foodshare.com/GetHelp/~/media/CAOxnard66/Images/AboutHunger/shelt-abris-symb.ashx"
         }); 
         markers.push(marker);
       }
@@ -604,7 +646,7 @@
                             Lon = object["attributes"]["Lng"];
                            
                             //put the markers on the map
-                            addMarker(new google.maps.LatLng(Lat,Lon));
+                            addWaterMarker(new google.maps.LatLng(Lat,Lon));
 
                           }
 
@@ -635,7 +677,7 @@
                             Lon = object["attributes"]["Lng"];
                            
                             //put the markers on the map
-                            addMarker(new google.maps.LatLng(Lat,Lon));
+                            addFoodMarker(new google.maps.LatLng(Lat,Lon));
                           }
 
                         }
@@ -665,7 +707,7 @@
                             Lon = object["attributes"]["Lng"];
                            
                             //put the markers on the map
-                            addMarker(new google.maps.LatLng(Lat,Lon));
+                            addElectricityMarker(new google.maps.LatLng(Lat,Lon));
 
                           }
 
@@ -696,7 +738,7 @@
                             Lon = object["attributes"]["Lng"];
                            
                             //put the markers on the map
-                            addMarker(new google.maps.LatLng(Lat,Lon));
+                            addMedMarker(new google.maps.LatLng(Lat,Lon));
 
                           }
 
@@ -727,7 +769,7 @@
                             Lon = object["attributes"]["Lng"];
                            
                             //put the markers on the map
-                            addMarker(new google.maps.LatLng(Lat,Lon));
+                            addShelterMarker(new google.maps.LatLng(Lat,Lon));
 
                           }
 
