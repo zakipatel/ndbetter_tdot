@@ -37,7 +37,7 @@ def reply():
 			return str(resp)
 		
 		elif counter == 1:
-			resp.message("What do you need? Enter all that apply (e.g. 12 for Water and Food): 1)Water, 2)Food, 3)Medical, 4)Shelter, 5)Electricity")
+			resp.message("What do you need? SMS 1 for Water, 2 for Food, 3 for Medical, 4 for Shelter, 5 for Electricity. Or SMS 12 for both Water and Food.")
 			counter += 1
 			session['counter'] = counter
 			return str(resp)
