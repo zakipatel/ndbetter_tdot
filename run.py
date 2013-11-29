@@ -14,6 +14,21 @@ app.secret_key = 'testing'
 def hello():
     return "Hello World!"
 
+def getLatLng(barang):
+	'''if request.method == 'GET':
+		barang = None
+		if 'barang' in request.args:
+			barang = request.args.get('barang')'''
+
+	if barang:
+		url = 'http://maps.googleapis.com/maps/api/geocode/json?address=%s,%s&sensor=false' % (barang, "philippines")
+		r = requests.get(url)
+		location = json.loads(r.text)['results'][0]['geometry']['location']
+		return location
+		
+	return "Barangay not found. Can't parse lat/long"
+
+
 @app.route("/receive-sms", methods=['GET', 'POST'])
 def reply():
 	print "Received Message"
@@ -22,24 +37,25 @@ def reply():
 	
 	if request.form['Body']:
 		resp = twilio.twiml.Response()
-		
+		help_request = {}
 		if counter == 0: 
 			resp.message("What is your Barangay? (e.g. Cabungaan)")
-			help_request = {}
-			help_request['number'] = request.form['From']
-			help_request['bar'] = request.form['Body']
+			session['number'] = request.form['From']
 			
 			# TODO: check whether it's a valid Barangay
-			session['help_request'] = help_request
-			print session['help_request']
-			counter += 1
-			session['counter'] = counter
+			print session['number']
+
+			session['counter'] += counter
 			return str(resp)
 		
 		elif counter == 1:
+			latlng = getLatLng(request.form['Body'])
+			session['lat'] = latlng['lat']
+			session['lng'] = latlng['lng']
+			print "Lat Lng" + session['lat'] + ", " +session['lng']
+
 			resp.message("What do you need? Enter all that apply (e.g. 12 for Water and Food): 1)Water, 2)Food, 3)Medical, 4)Shelter, 5)Electricity")
-			counter += 1
-			session['counter'] = counter
+			session['counter'] += 1
 			return str(resp)
 
 		elif counter == 2:
@@ -81,7 +97,9 @@ def reply():
 			connection.request('POST', '/1/classes/report', json.dumps({
 				"phone_number": help_request['number'],
 				"barangay": help_request['bar'], 
-				"water" : Water,
+				"Lat": help_request['lat'],
+				"Lng": help_request['lng'],
+				"water" : Water,s
 				"food": Food,
 				"shelter" : Shelter,
 				"medical" : Medical, 
@@ -95,11 +113,13 @@ def reply():
 			print result
 
 			#check for successful save, if not, fail gracefully
-			'''if result'''
-			counter += 1
-			session['counter'] = counter
+
+			session['counter'] +=1
 			resp.message("Thanks!")
-			return str(resp)	
+			return str(resp)
+		else:
+			resp.message("Thanks!")
+			return str(resp)
 	else:
 		resp.message("Thank you for your report.")
 		return str(resp)	
@@ -107,7 +127,9 @@ def reply():
 	#TODO: timeout for sessions
 
 
-@app.route("/latlng")
+
+
+'''@app.route("/latlng")
 def getLatLng():
 	if request.method == 'GET':
 		barang = None
@@ -120,7 +142,7 @@ def getLatLng():
 			location = json.loads(r.text)['results'][0]['geometry']['location']
 			return json.dumps(location)
  		else:
- 			return "Barangay not found. Can't parse lat/long"
+ 			return "Barangay not found. Can't parse lat/long"'''
 
 if __name__ == "__main__":
     app.run(debug=True)
